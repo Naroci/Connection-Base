@@ -25,9 +25,9 @@ public interface IHostConnection
     
     void Stop();
     
-    void Broadcast(object obj);
-    void Broadcast(byte[] objBytes);
-    void Broadcast(string obj);
+    void Broadcast(object obj, IClientConnection client);
+    void Broadcast(byte[] objBytes, IClientConnection client);
+    void Broadcast(string obj, IClientConnection client);
     
     void Send(object obj, IClientConnection client);
     

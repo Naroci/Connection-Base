@@ -7,8 +7,8 @@ namespace ConsoleApp2;
 
 class Program
 {
-
     private static bool Running;
+
     static void Main(string[] args)
     {
         HostConnection server = new();
@@ -27,12 +27,10 @@ class Program
            if (currentStream.CanRead)
            {
                currentStream.Read(buffer, 0, buffer.Length);
-           
+
                string message = UTF8Encoding.UTF8.GetString(buffer);
                Console.WriteLine(message);
            }
-
-          
        }
     }*/
 }

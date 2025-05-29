@@ -17,7 +17,7 @@ public class HostConnection : IHostConnection
     public void AddClient(IClientConnection client)
     {
         if (!_clients.Contains(client))
-        {   
+        {
             _clients.Add(client);
             Console.WriteLine("Client added");
         }
@@ -52,6 +52,7 @@ public class HostConnection : IHostConnection
             {
                 var tcpClient = _listener.AcceptTcpClient();
                 var client = new ClientConnection(tcpClient);
+                client.ReconnectEnabled = false;
                 AddClient(client);
             }
         });
@@ -73,22 +74,25 @@ public class HostConnection : IHostConnection
     {
         while (_isRunning)
         {
-            foreach (var client in _clients)
+            lock (_clients)
             {
-                if (client.GetIfConnected() )
+                foreach (var client in _clients)
                 {
-                    if (client.GetConnectionStatus() == ConnectionStatus.Waiting)
+                    if (client.GetIfConnected())
                     {
-                        Thread clientListenerTread = new Thread(ListenOnThread);
-                        clientListenerTread.Start(client);
+                        if (client.GetConnectionStatus() == ConnectionStatus.Waiting)
+                        {
+                            Thread clientListenerTread = new Thread(ListenOnThread);
+                            clientListenerTread.Start(client);
+                        }
+                    }
+                    else
+                    {
+                        RemoveClient(client);
                     }
                 }
-                else
-                {
-                    RemoveClient(client);
-                }
+                Thread.Sleep(1000);
             }
-            Thread.Sleep(1000);
         }
     }
 
@@ -101,28 +105,45 @@ public class HostConnection : IHostConnection
             Console.WriteLine($"{identifier}: {messageReceived}");
             if (!string.IsNullOrEmpty(messageReceived))
             {
-                
-                Send($"Confirmed {identifier}: [{messageReceived}]",client);
+                Broadcast($"Confirmed {identifier}: [{messageReceived}]", client);
             }
         }
     }
 
-    public void Broadcast(object obj)
+    public void Broadcast(object obj, IClientConnection baseclient)
     {
+        baseclient.Send(obj);
         foreach (var client in _clients)
+        {
+            if (client == baseclient)
+                continue;
+            
             client.Send(obj);
+        }
     }
 
-    public void Broadcast(byte[] objBytes)
+    public void Broadcast(byte[] objBytes, IClientConnection baseclient)
     {
+        baseclient.Send(objBytes);
         foreach (var client in _clients)
+        {
+            if (client == baseclient)
+                continue;
+            
             client.Send(objBytes);
+        }
     }
 
-    public void Broadcast(string obj)
+    public void Broadcast(string obj, IClientConnection baseclient)
     {
+        baseclient.Send(obj);
         foreach (var client in _clients)
+        {
+            if (client == baseclient)
+                continue;
+            
             client.Send(obj);
+        }
     }
 
     public void Send(object obj, IClientConnection client) => client.Send(obj);

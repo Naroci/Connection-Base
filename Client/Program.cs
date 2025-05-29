@@ -11,17 +11,20 @@ class Program
         Thread.Sleep(3000);
         bool running = true;
         ClientConnection connection = new ClientConnection();
+        connection.SetReconnectAttempts(10);
+        connection.Connect("localhost", 5555);
         while (running)
         {
             var message = Console.ReadLine();
             running = message != "exit";
-            if (!connection.GetIfConnected())
-                connection.Connect("localhost", 5555);
-
             if (connection.GetIfConnected())
             {
                 connection.Send(message);
                 Console.WriteLine(connection.ReceiveString());
+            }
+            else
+            {
+                Console.WriteLine("Not Connected.");
             }
         }
         Console.WriteLine("Ended.");

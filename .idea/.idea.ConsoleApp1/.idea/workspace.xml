@@ -8,7 +8,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b9b01b49-ee3c-4de1-ad79-84df019ba87a" name="Changes" comment="" />
+    <list default="true" id="b9b01b49-ee3c-4de1-ad79-84df019ba87a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ConsoleApp1/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ConsoleApp1/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Client/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConnectionBase.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/ConnectionBase.sln.DotSettings.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Shared.Core/Connection/Client/ClientConnection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Shared.Core/Connection/Client/ClientConnection.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Shared.Core/Connection/Client/IClientConnection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Shared.Core/Connection/Client/IClientConnection.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Shared.Core/Connection/Host/HostConnection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Shared.Core/Connection/Host/HostConnection.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Shared.Core/Connection/Host/IHostConnection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Shared.Core/Connection/Host/IHostConnection.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -17,8 +26,15 @@
   <component name="DpaMonitoringSettings">
     <option name="firstShow" value="false" />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/473d97221b573ab97e6e745d8adae8b9e95a666539d6ed3cc8566b245d93a/ArgumentNullException.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/4743f513c7ddc8411223a46f0ca426ed929391acebcff993721dff2f0c6b34/ThrowHelper.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/5c19c54de7a921e8bebf1a7d41a3181a2acd77edfdb5a1dd17e89965c1505ada/TCPClient.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/821eadf8c89b36691b3def72d04889d8d4cd791563a97558876f873a81a1a085/StackFrameIterator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/9bd29ed270592f13f46460033b5eeba9f68913b0bfbe86d8374848eb38240/NetworkStream.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/a8c4cf59cb172148a6eed5f832439565571ef983c1436ec8a657378d9fc6ce/Socket.Unix.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/abc83043c1569bec4bc78cce7f575c70d048ac6b754990786667533c4583e08/Socket.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/bf9021a960b74107a7e141aa06bc9d8a0a53c929178c2fb95b1597be8af8dc/ExceptionDispatchInfo.cs" root0="FORCE_HIGHLIGHTING" />
@@ -26,6 +42,7 @@
     <setting file="file://$PROJECT_DIR$/Server/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Shared.Core/Message.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -42,6 +59,7 @@
     &quot;.NET Project.Server.executor&quot;: &quot;Debug&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -143,13 +161,14 @@
       <workItem from="1745310018012" duration="2237000" />
       <workItem from="1745391065226" duration="825000" />
       <workItem from="1745991927662" duration="2790000" />
-      <workItem from="1748476970661" duration="4504000" />
+      <workItem from="1748476970661" duration="11314000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
