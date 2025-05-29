@@ -8,7 +8,10 @@ class Program
 {
     static void Main(string[] args)
     {
-        Thread.Sleep(3000);
+        Console.Clear();
+        Console.Title = ".:{[ Client ]}:.";
+
+        //Thread.Sleep(3000);
         bool running = true;
         ClientConnection connection = new ClientConnection();
         connection.SetReconnectAttempts(10);
@@ -19,7 +22,6 @@ class Program
                               $"\n ID : {package.GetShortId()} (Short)" +
                               $"\n Size : {package.GetContentSize()}" +
                               $"\n Content : [{package.GetContentAsString()}]");
-
         };
         while (running)
         {
@@ -35,6 +37,7 @@ class Program
                 Console.WriteLine("Not Connected.");
             }
         }
+
         Console.WriteLine("Ended.");
     }
 }

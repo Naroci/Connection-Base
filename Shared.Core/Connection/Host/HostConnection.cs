@@ -58,22 +58,32 @@ public class HostConnection : IHostConnection
 
     public void Start(int port)
     {
-        _listener = new TcpListener(port);
-        _listener.Start();
-        Console.WriteLine("Server started on port: " + port);
-        _isRunning = true;
-        Thread acceptThread = new(() =>
+        try
         {
-            while (_isRunning)
+            _listener = new TcpListener(port);
+            _listener.Start();
+            Console.WriteLine("Server started on port: " + port);
+            _isRunning = true;
+            Thread acceptThread = new(() =>
             {
-                var tcpClient = _listener.AcceptTcpClient();
-                var client = new ClientConnection(tcpClient);
-                client.ReconnectEnabled = false;
-                AddClient(client);
+                while (_isRunning)
+                {
+                    var tcpClient = _listener.AcceptTcpClient();
+                    var client = new ClientConnection(tcpClient);
+                    client.ReconnectEnabled = false;
+                    AddClient(client);
+                }
+            });
+            acceptThread.IsBackground = true;
+            acceptThread.Start();
+        }
+        catch (Exception ex)
+        {
+            if (ex is SocketException socketException)
+            {
+                Console.WriteLine("Could not start the Server (" + socketException.Message + ")");
             }
-        });
-        acceptThread.IsBackground = true;
-        acceptThread.Start();
+        }
     }
 
     public void Start() => Start(5555);
@@ -120,11 +130,12 @@ public class HostConnection : IHostConnection
                         RemoveClient(client);
                     }
                 }
+
                 Thread.Sleep(tickrate);
             }
         }
     }
-    
+
     private void ListenOnThread(object clientObj)
     {
         if (clientObj is IClientConnection client && client.GetIfConnected())

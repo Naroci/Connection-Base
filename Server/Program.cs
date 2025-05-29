@@ -11,26 +11,11 @@ class Program
 
     static void Main(string[] args)
     {
+        Console.Clear();
+        Console.Title = ".:{[ Server ]}:.";
+   
         HostConnection server = new();
         server.Start(5555);
         server.Listen(250);
     }
-    /*
-    private static void StartHandleClient(object client)
-    {
-       if (client is not TcpClient tcpClient) return;
-
-       while (Running && tcpClient.Connected)
-       {
-           var currentStream = tcpClient.GetStream();
-           byte[] buffer = new byte[1024];
-           if (currentStream.CanRead)
-           {
-               currentStream.Read(buffer, 0, buffer.Length);
-
-               string message = UTF8Encoding.UTF8.GetString(buffer);
-               Console.WriteLine(message);
-           }
-       }
-    }*/
 }

@@ -10,13 +10,18 @@ public class ClientConnection : IClientConnection
     private Guid _uid = Guid.NewGuid();
     private int reconnectAttempts = 0;
     private int currentAttempt = 0;
-    
-    public Action<ConnectionPackage> OnMessageReceived { get; set; }
-
+    private int reconnectAttemptTiming = 2000;
+    private string host;
+    private int port;
+    private TcpClient _tcpClient;
+    private bool IsListening = false;
+    private bool reconnectJobRunning = false;
     private bool _reconnectEnabled = true;
-
+    private ConnectionStatus _connectionStatus;
     private bool networkStreamAvailable = false;
 
+    public Action<ConnectionPackage> OnMessageReceived { get; set; }
+    
     private bool NetworkStreamAvailable
     {
         get => networkStreamAvailable;
@@ -29,43 +34,11 @@ public class ClientConnection : IClientConnection
             }
         }
     }
-
-    public bool ReconnectEnabled
-    {
-        get => _reconnectEnabled;
-        set { _reconnectEnabled = value; }
-    }
-
-    private int reconnectAttemptTiming = 2000;
-
-    private string host;
-    private int port;
-
-
-    public void SetReconnectAttempts(int attempt = 0)
-    {
-        reconnectAttempts = attempt;
-    }
-
-    public void SetReconnectAttemptTiming(int timing = 2000)
-    {
-        reconnectAttemptTiming = timing;
-    }
-
-    public Guid GetUniqueIdentifier()
-    {
-        return _uid;
-    }
-
-    private ConnectionStatus _connectionStatus;
-    public ConnectionStatus GetConnectionStatus() => _connectionStatus;
-
+    
     private void SetConnectionStatus(ConnectionStatus connectionStatus)
     {
         _connectionStatus = connectionStatus;
     }
-
-    private TcpClient _tcpClient;
 
     private NetworkStream getStream()
     {
@@ -77,14 +50,22 @@ public class ClientConnection : IClientConnection
         return _tcpClient.GetStream();
     }
 
-    private bool reconnectJobRunning = false;
-
     private void StartReconnectJob()
     {
         if (reconnectJobRunning == false)
         {
             reconnectJobRunning = true;
             Thread reconnectThread = new Thread(ReconnectJob);
+            reconnectThread.Start();
+        }
+    }
+    
+    private void StartListening()
+    {
+        if (!IsListening)
+        {
+            IsListening = true;
+            Thread reconnectThread = new Thread(Listen);
             reconnectThread.Start();
         }
     }
@@ -119,13 +100,14 @@ public class ClientConnection : IClientConnection
 
             this.currentAttempt++;
             running = reconnectAttempts == 0 || reconnectAttempts > 0 && currentAttempt < reconnectAttempts;
-            
         }
+
         Console.WriteLine($"Reconnection ended... ({currentAttempt} attempts total)");
         reconnectJobRunning = false;
     }
-
-
+    
+    public ConnectionStatus GetConnectionStatus() => _connectionStatus;
+    
     public ClientConnection()
     {
         _tcpClient = new TcpClient();
@@ -136,27 +118,56 @@ public class ClientConnection : IClientConnection
         _tcpClient = client;
     }
 
+
+    public bool ReconnectEnabled
+    {
+        get => _reconnectEnabled;
+        set { _reconnectEnabled = value; }
+    }
+
+    public void SetReconnectAttempts(int attempt = 0)
+    {
+        reconnectAttempts = attempt;
+    }
+
+    public void SetReconnectAttemptTiming(int timing = 2000)
+    {
+        reconnectAttemptTiming = timing;
+    }
+
+    public Guid GetUniqueIdentifier()
+    {
+        return _uid;
+    }
+
+
+   
+
     public EndPoint GetEndpoint() => _tcpClient.Client.RemoteEndPoint;
 
     public void Connect(string ip, int port)
     {
-        this.host = ip;
-        this.port = port;
-
-        if (_tcpClient == null)
+        try
         {
-            _tcpClient = new TcpClient();
-            _tcpClient.Client.ReceiveTimeout = reconnectAttemptTiming;
-            _tcpClient.ReceiveTimeout = reconnectAttemptTiming;
+            this.host = ip;
+            this.port = port;
+
+            if (_tcpClient == null)
+            {
+                _tcpClient = new TcpClient();
+            }
+
+            _tcpClient.Connect(this.host, this.port);
+            NetworkStreamAvailable = _tcpClient.Connected;
         }
-        
-        _tcpClient.Connect(this.host, this.port);
-        if (_tcpClient.Connected)
+        catch (Exception ex)
+        {
+        }
+
+        if (GetIfConnected())
         {
             StartListening();
         }
-
-        NetworkStreamAvailable = _tcpClient.Connected;
     }
 
     public void Reconnect(string ip, int port)
@@ -164,40 +175,31 @@ public class ClientConnection : IClientConnection
         this.host = ip;
         this.port = port;
 
-        if (_tcpClient != null)
-            _tcpClient.Dispose();
-
-        _tcpClient = new TcpClient();
-        _tcpClient.Client.ReceiveTimeout = reconnectAttemptTiming;
-        _tcpClient.ReceiveTimeout = reconnectAttemptTiming;
-
-        _tcpClient.Connect(this.host, this.port);
-        NetworkStreamAvailable = _tcpClient.Connected;
-        if (_tcpClient != null && _tcpClient.Connected)
+        lock (_tcpClient)
         {
-            Console.WriteLine("Reconnected!");
-            StartListening();
+            if (_tcpClient != null)
+                _tcpClient.Dispose();
+
+            IsListening = false;
+            _tcpClient = new TcpClient();
+
+            _tcpClient.Connect(this.host, this.port);
+            NetworkStreamAvailable = _tcpClient.Connected;
+            if (_tcpClient != null && _tcpClient.Connected)
+            {
+                Console.WriteLine("Reconnected!");
+                StartListening();
+            }
         }
     }
 
-    private bool IsListening = false;
-    
-    private void StartListening()
-    {
-        if (!IsListening)
-        {
-            IsListening = true;
-            Thread reconnectThread = new Thread(Listen);
-            reconnectThread.Start();
-        }
-    }
 
     public void Listen()
     {
         Console.WriteLine("Start Listening...");
-        while (GetIfConnected())
+        while (GetIfConnected() && GetConnectionStatus() == ConnectionStatus.Waiting)
         {
-            var receivedBytes =  ReceiveBytes();
+            var receivedBytes = ReceiveBytes();
         }
 
         IsListening = false;
@@ -207,7 +209,8 @@ public class ClientConnection : IClientConnection
 
     public bool GetIfConnected()
     {
-        if ((_tcpClient == null || !NetworkStreamAvailable) && _reconnectEnabled || (!_tcpClient.Connected  || !NetworkStreamAvailable) && _reconnectEnabled)
+        if ((_tcpClient == null || !NetworkStreamAvailable) && _reconnectEnabled ||
+            (!_tcpClient.Connected || !NetworkStreamAvailable) && _reconnectEnabled)
         {
             StartReconnectJob();
             return false;
@@ -264,15 +267,15 @@ public class ClientConnection : IClientConnection
 
             int bytesRead = getStream().Read(buffer, 0, buffer.Length);
             NetworkStreamAvailable = true;
-          
+
             var result = buffer.Take(bytesRead).ToArray();
-            
+
             if (bytesRead > 0 && result != null && result.Length > 0)
                 this.OnMessageReceived?.Invoke(new ConnectionPackage(result));
 
             SetConnectionStatus(ConnectionStatus.Waiting);
 
-            
+
             return result;
         }
         catch (Exception e)
@@ -285,16 +288,15 @@ public class ClientConnection : IClientConnection
         return null;
     }
 
-
     public string ReceiveString()
     {
         var bytes = ReceiveBytes();
-        if (bytes != null && bytes.Length == 0) 
+        if (bytes != null && bytes.Length == 0)
             return string.Empty;
-        
+
         if (bytes == null)
             return string.Empty;
-        
+
         return Encoding.UTF8.GetString(bytes);
     }
 
