@@ -13,6 +13,14 @@ class Program
         ClientConnection connection = new ClientConnection();
         connection.SetReconnectAttempts(10);
         connection.Connect("localhost", 5555);
+        connection.OnMessageReceived += package =>
+        {
+            Console.WriteLine($"[{package.GetTimestamp().TimeOfDay}, {package.GetId()}] Received: " +
+                              $"\n ID : {package.GetShortId()} (Short)" +
+                              $"\n Size : {package.GetContentSize()}" +
+                              $"\n Content : [{package.GetContentAsString()}]");
+
+        };
         while (running)
         {
             var message = Console.ReadLine();
@@ -20,7 +28,7 @@ class Program
             if (connection.GetIfConnected())
             {
                 connection.Send(message);
-                Console.WriteLine(connection.ReceiveString());
+                //Console.WriteLine(connection.ReceiveString());
             }
             else
             {

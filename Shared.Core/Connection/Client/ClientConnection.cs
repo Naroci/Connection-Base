@@ -10,6 +10,8 @@ public class ClientConnection : IClientConnection
     private Guid _uid = Guid.NewGuid();
     private int reconnectAttempts = 0;
     private int currentAttempt = 0;
+    
+    public Action<ConnectionPackage> OnMessageReceived { get; set; }
 
     private bool _reconnectEnabled = true;
 
@@ -25,7 +27,6 @@ public class ClientConnection : IClientConnection
             {
                 StartReconnectJob();
             }
-        
         }
     }
 
@@ -143,9 +144,20 @@ public class ClientConnection : IClientConnection
         this.port = port;
 
         if (_tcpClient == null)
+        {
             _tcpClient = new TcpClient();
+            _tcpClient.Client.ReceiveTimeout = reconnectAttemptTiming;
+            _tcpClient.ReceiveTimeout = reconnectAttemptTiming;
+        }
+
+      
 
         _tcpClient.Connect(this.host, this.port);
+        if (_tcpClient.Connected)
+        {
+            StartListening();
+        }
+
         NetworkStreamAvailable = _tcpClient.Connected;
     }
 
@@ -158,13 +170,39 @@ public class ClientConnection : IClientConnection
             _tcpClient.Dispose();
 
         _tcpClient = new TcpClient();
+        _tcpClient.Client.ReceiveTimeout = reconnectAttemptTiming;
+        _tcpClient.ReceiveTimeout = reconnectAttemptTiming;
 
         _tcpClient.Connect(this.host, this.port);
         NetworkStreamAvailable = _tcpClient.Connected;
         if (_tcpClient != null && _tcpClient.Connected)
         {
             Console.WriteLine("Reconnected!");
+            StartListening();
         }
+    }
+
+    private bool IsListening = false;
+    
+    private void StartListening()
+    {
+        if (!IsListening)
+        {
+            IsListening = true;
+            Thread reconnectThread = new Thread(Listen);
+            reconnectThread.Start();
+        }
+    }
+
+    private void Listen()
+    {
+        Console.WriteLine("Start Listening...");
+        while (GetIfConnected())
+        {
+            var receivedBytes =  ReceiveBytes();
+        }
+
+        IsListening = false;
     }
 
     public EndPoint GetLocalEndPoint() => _tcpClient.Client.LocalEndPoint;
@@ -228,8 +266,16 @@ public class ClientConnection : IClientConnection
 
             int bytesRead = getStream().Read(buffer, 0, buffer.Length);
             NetworkStreamAvailable = true;
+          
+            var result = buffer.Take(bytesRead).ToArray();
+            
+            if (bytesRead > 0 && result != null && result.Length > 0)
+                this.OnMessageReceived?.Invoke(new ConnectionPackage(result));
+
             SetConnectionStatus(ConnectionStatus.Waiting);
-            return buffer.Take(bytesRead).ToArray();
+
+            
+            return result;
         }
         catch (Exception e)
         {

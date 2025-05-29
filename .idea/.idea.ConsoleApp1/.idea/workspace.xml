@@ -10,13 +10,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b9b01b49-ee3c-4de1-ad79-84df019ba87a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ConsoleApp1/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ConsoleApp1/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Client/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConnectionBase.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/ConnectionBase.sln.DotSettings.user" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Server/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Shared.Core/Connection/Client/ClientConnection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Shared.Core/Connection/Client/ClientConnection.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Shared.Core/Connection/Client/IClientConnection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Shared.Core/Connection/Client/IClientConnection.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Shared.Core/Connection/Host/HostConnection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Shared.Core/Connection/Host/HostConnection.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Shared.Core/Connection/Host/IHostConnection.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Shared.Core/Connection/Host/IHostConnection.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,7 +155,7 @@
       <workItem from="1745310018012" duration="2237000" />
       <workItem from="1745391065226" duration="825000" />
       <workItem from="1745991927662" duration="2790000" />
-      <workItem from="1748476970661" duration="11314000" />
+      <workItem from="1748476970661" duration="13366000" />
     </task>
     <servers />
   </component>
