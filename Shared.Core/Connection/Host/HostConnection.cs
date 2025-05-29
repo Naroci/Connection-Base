@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
 using ClassLibrary1.Connection.Client;
+using ClassLibrary1.Connection.Host.MessageEvent;
 
 namespace ClassLibrary1.Connection.Host;
 
@@ -10,14 +11,25 @@ public class HostConnection : IHostConnection
     private readonly List<IClientConnection> _clients = new();
     private bool _isRunning;
 
+    public Action<HostMessageEvent> OnDataReceived { get; set; }
+
     public bool GetIfStarted() => _isRunning;
 
-    public List<IClientConnection> GetConnectedClients() => _clients;
+    public List<IClientConnection> GetClients()
+    {
+        return new List<IClientConnection>(_clients);
+    }
 
     public void AddClient(IClientConnection client)
     {
         if (!_clients.Contains(client))
         {
+            client.OnMessageReceived += package =>
+            {
+                var message = new HostMessageEvent(client, package);
+                this.OnDataReceived?.Invoke(message);
+                OnDataMessageReceived(message);
+            };
             _clients.Add(client);
             Console.WriteLine("Client added");
         }
@@ -30,7 +42,11 @@ public class HostConnection : IHostConnection
     public void RemoveClient(IClientConnection client)
     {
         if (_clients.Contains(client))
+        {
+            client.OnMessageReceived -= package => { };
             _clients.Remove(client);
+            Console.WriteLine($"[{client.GetUniqueIdentifier()}] - Client removed");
+        }
     }
 
     public EndPoint GetEndPointByClient(IClientConnection client) => client.GetEndpoint();
@@ -70,13 +86,38 @@ public class HostConnection : IHostConnection
         _clients.Clear();
     }
 
+    private bool listening = false;
+
+    private void OnDataMessageReceived(HostMessageEvent message)
+    {
+        var identifier = message.GetClient().GetUniqueIdentifier();
+        var messageReceived = message.GetPackage().GetContentAsString();
+        Console.WriteLine($"{identifier}: {messageReceived}");
+        if (!string.IsNullOrEmpty(messageReceived))
+        {
+            Broadcast($"Confirmed {identifier}: [{messageReceived}]", message.GetClient());
+        }
+    }
+
     public void Listen()
     {
+        /*
+        if (!listening)
+        {
+            listening = true;
+        }
+
+        OnDataReceived += package =>
+        {
+           
+        };*/
+        
+        
         while (_isRunning)
         {
             lock (_clients)
             {
-                foreach (var client in _clients)
+                foreach (var client in GetClients())
                 {
                     if (client.GetIfConnected())
                     {
@@ -91,22 +132,25 @@ public class HostConnection : IHostConnection
                         RemoveClient(client);
                     }
                 }
+
                 Thread.Sleep(1000);
             }
         }
     }
+    
 
     private void ListenOnThread(object clientObj)
     {
         if (clientObj is IClientConnection client && client.GetIfConnected())
         {
             var identifier = client.GetUniqueIdentifier();
-            var messageReceived = ReceiveString(client);
+            client.Listen();
+            /*
             Console.WriteLine($"{identifier}: {messageReceived}");
             if (!string.IsNullOrEmpty(messageReceived))
             {
                 Broadcast($"Confirmed {identifier}: [{messageReceived}]", client);
-            }
+            }*/
         }
     }
 
@@ -117,7 +161,7 @@ public class HostConnection : IHostConnection
         {
             if (client == baseclient)
                 continue;
-            
+
             client.Send(obj);
         }
     }
@@ -129,7 +173,7 @@ public class HostConnection : IHostConnection
         {
             if (client == baseclient)
                 continue;
-            
+
             client.Send(objBytes);
         }
     }
@@ -141,7 +185,7 @@ public class HostConnection : IHostConnection
         {
             if (client == baseclient)
                 continue;
-            
+
             client.Send(obj);
         }
     }

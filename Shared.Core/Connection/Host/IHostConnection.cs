@@ -1,5 +1,6 @@
 using System.Net;
 using ClassLibrary1.Connection.Client;
+using ClassLibrary1.Connection.Host.MessageEvent;
 
 namespace ClassLibrary1.Connection.Host;
 
@@ -7,7 +8,9 @@ public interface IHostConnection
 {
     bool GetIfStarted();
     
-    List<IClientConnection> GetConnectedClients();
+    Action<HostMessageEvent> OnDataReceived { get; set; }
+    
+    List<IClientConnection> GetClients();
     
     void AddClient(IClientConnection client);
     

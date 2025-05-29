@@ -149,9 +149,7 @@ public class ClientConnection : IClientConnection
             _tcpClient.Client.ReceiveTimeout = reconnectAttemptTiming;
             _tcpClient.ReceiveTimeout = reconnectAttemptTiming;
         }
-
-      
-
+        
         _tcpClient.Connect(this.host, this.port);
         if (_tcpClient.Connected)
         {
@@ -194,7 +192,7 @@ public class ClientConnection : IClientConnection
         }
     }
 
-    private void Listen()
+    public void Listen()
     {
         Console.WriteLine("Start Listening...");
         while (GetIfConnected())
