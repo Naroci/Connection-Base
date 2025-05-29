@@ -7,6 +7,10 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <WarningLevel>2</WarningLevel>
+    </PropertyGroup>
+
     <ItemGroup>
       <ProjectReference Include="..\Shared.Core\Shared.Core.csproj" />
     </ItemGroup>

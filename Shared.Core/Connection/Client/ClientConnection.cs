@@ -14,7 +14,7 @@ public class ClientConnection : IClientConnection
     private string host;
     private int port;
     private TcpClient _tcpClient;
-    private bool IsListening = false;
+    private bool _isListening = false;
     private bool reconnectJobRunning = false;
     private bool _reconnectEnabled = true;
     private ConnectionStatus _connectionStatus;
@@ -62,9 +62,9 @@ public class ClientConnection : IClientConnection
     
     private void StartListening()
     {
-        if (!IsListening)
+        if (!_isListening)
         {
-            IsListening = true;
+            _isListening = true;
             Thread reconnectThread = new Thread(Listen);
             reconnectThread.Start();
         }
@@ -180,7 +180,7 @@ public class ClientConnection : IClientConnection
             if (_tcpClient != null)
                 _tcpClient.Dispose();
 
-            IsListening = false;
+            _isListening = false;
             _tcpClient = new TcpClient();
 
             _tcpClient.Connect(this.host, this.port);
@@ -202,7 +202,7 @@ public class ClientConnection : IClientConnection
             var receivedBytes = ReceiveBytes();
         }
 
-        IsListening = false;
+        _isListening = false;
     }
 
     public EndPoint GetLocalEndPoint() => _tcpClient.Client.LocalEndPoint;

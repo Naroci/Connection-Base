@@ -14,7 +14,6 @@ public interface IClientConnection
 
     void Listen();
     
-    
     Guid GetUniqueIdentifier();
 
     ConnectionStatus GetConnectionStatus();

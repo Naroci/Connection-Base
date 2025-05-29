@@ -7,8 +7,6 @@ namespace Server;
 
 class Program
 {
-    private static bool Running;
-
     static void Main(string[] args)
     {
         Console.Clear();
