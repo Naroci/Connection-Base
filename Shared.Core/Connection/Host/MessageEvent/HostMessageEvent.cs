@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
-using ClassLibrary1.Connection.Client;
+using Connection.Shared.Connection.Client;
 
-namespace ClassLibrary1.Connection.Host.MessageEvent;
+namespace Connection.Shared.Connection.Host.MessageEvent;
 
 public class HostMessageEvent
 {

@@ -1,9 +1,9 @@
 using System.Net;
 using System.Net.Sockets;
-using ClassLibrary1.Connection.Client;
-using ClassLibrary1.Connection.Host.MessageEvent;
+using Connection.Shared.Connection.Client;
+using Connection.Shared.Connection.Host.MessageEvent;
 
-namespace ClassLibrary1.Connection.Host;
+namespace Connection.Shared.Connection.Host;
 
 public class HostConnection : IHostConnection
 {

@@ -1,6 +1,6 @@
 using System.Net;
 
-namespace ClassLibrary1.Connection.Client;
+namespace Connection.Shared.Connection.Client;
 
 public interface IClientConnection
 {

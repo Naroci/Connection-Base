@@ -3,7 +3,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 
-namespace ClassLibrary1.Connection.Client;
+namespace Connection.Shared.Connection.Client;
 
 public class ClientConnection : IClientConnection
 {

@@ -1,4 +1,4 @@
-namespace ClassLibrary1.Connection;
+namespace Connection.Shared.Connection;
 
 public interface IConnection
 {

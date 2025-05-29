@@ -1,8 +1,8 @@
 ﻿using System.Net.Sockets;
 using System.Text;
-using ClassLibrary1.Connection.Client;
+using Connection.Shared.Connection.Client;
 
-namespace ConsoleApp1;
+namespace Client;
 
 class Program
 {

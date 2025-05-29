@@ -1,7 +1,7 @@
 using System.Text;
 using System.Text.Json;
 
-namespace ClassLibrary1;
+namespace Connection.Shared;
 
 public class ConnectionPackage
 {

@@ -1,9 +1,9 @@
 ﻿using System.Net.Sockets;
 using System.Text;
 using System.Text.Unicode;
-using ClassLibrary1.Connection.Host;
+using Connection.Shared.Connection.Host;
 
-namespace ConsoleApp2;
+namespace Server;
 
 class Program
 {
