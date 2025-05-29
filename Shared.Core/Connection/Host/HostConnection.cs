@@ -99,20 +99,8 @@ public class HostConnection : IHostConnection
         }
     }
 
-    public void Listen()
+    public void Listen(int tickrate = 1000)
     {
-        /*
-        if (!listening)
-        {
-            listening = true;
-        }
-
-        OnDataReceived += package =>
-        {
-           
-        };*/
-        
-        
         while (_isRunning)
         {
             lock (_clients)
@@ -132,25 +120,17 @@ public class HostConnection : IHostConnection
                         RemoveClient(client);
                     }
                 }
-
-                Thread.Sleep(1000);
+                Thread.Sleep(tickrate);
             }
         }
     }
     
-
     private void ListenOnThread(object clientObj)
     {
         if (clientObj is IClientConnection client && client.GetIfConnected())
         {
             var identifier = client.GetUniqueIdentifier();
             client.Listen();
-            /*
-            Console.WriteLine($"{identifier}: {messageReceived}");
-            if (!string.IsNullOrEmpty(messageReceived))
-            {
-                Broadcast($"Confirmed {identifier}: [{messageReceived}]", client);
-            }*/
         }
     }
 

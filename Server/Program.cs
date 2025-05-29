@@ -13,7 +13,7 @@ class Program
     {
         HostConnection server = new();
         server.Start(5555);
-        server.Listen();
+        server.Listen(250);
     }
     /*
     private static void StartHandleClient(object client)

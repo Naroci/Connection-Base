@@ -25,6 +25,8 @@ public interface IHostConnection
     void Start(int port);
     
     void Start();
+
+    void Listen(int tickrate = 1000);
     
     void Stop();
     
