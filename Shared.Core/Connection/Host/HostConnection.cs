@@ -105,7 +105,7 @@ public class HostConnection : IHostConnection
         Console.WriteLine($"{identifier}: {messageReceived}");
         if (!string.IsNullOrEmpty(messageReceived))
         {
-            Broadcast($"Confirmed {identifier}: [{messageReceived}]", message.GetClient());
+            Broadcast(messageReceived, message.GetClient());
         }
     }
 
