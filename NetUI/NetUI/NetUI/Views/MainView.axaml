@@ -1,0 +1,39 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:NetUI.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="NetUI.Views.MainView"
+             x:DataType="vm:MainViewModel">
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainViewModel />
+    </Design.DataContext>
+    <Grid>
+        <Grid RowDefinitions="*,Auto" ColumnDefinitions="*,Auto">
+            <Border Background="WhiteSmoke" CornerRadius="4" Margin="15,15,15,0" BorderBrush="Black" BorderThickness="1">
+                <ScrollViewer x:Name="ScrollViewer">
+                    <StackPanel x:Name="entries" />
+                </ScrollViewer>
+            </Border>
+            <Grid Grid.Row="1" ColumnDefinitions="*,Auto" Margin="15">
+                <TextBox x:Name="EntryBox" Grid.Row="1" Margin="0,0,15,0" />
+                <Button Click="SendButtonClicked" Grid.Column="1" Content="Send" Width="80"
+                        HorizontalContentAlignment="Center" IsDefault="True" />
+            </Grid>
+
+            <StackPanel Margin="0,15,15,15" Grid.Column="1">
+                <Label x:Name="StatusLabel" Content="Disconnected" Margin="0,0,0,7" HorizontalContentAlignment="Center" />
+                <Grid ColumnDefinitions="*,Auto">
+                    <TextBox x:Name="IpBox" Width="150" Watermark="192.168.0.197" TextAlignment="Center" />
+                    <TextBox Grid.Column="1" x:Name="portBox" Margin="5,0,0,0" Watermark="5555"
+                             TextAlignment="Center" />
+                </Grid>
+                <Button Content="Connect" Click="ConnectButtonClicked" Margin="0,15,0,0" HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

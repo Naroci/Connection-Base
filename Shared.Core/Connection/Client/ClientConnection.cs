@@ -60,6 +60,8 @@ public class ClientConnection : IClientConnection
         }
     }
     
+    CancellationTokenSource listenerToken = new CancellationTokenSource();
+    
     private void StartListening()
     {
         if (!_isListening)
@@ -70,10 +72,12 @@ public class ClientConnection : IClientConnection
         }
     }
 
+    private bool running = false;
+        
     private void ReconnectJob()
     {
         currentAttempt = 0;
-        bool running = true;
+        running = true;
         reconnectAttemptTiming = reconnectAttemptTiming > 50 ? reconnectAttemptTiming : 50;
         while (running)
         {
@@ -302,9 +306,32 @@ public class ClientConnection : IClientConnection
 
     public void Disconnect()
     {
-        if (getStream() != null)
-            getStream().Close();
+        _isListening = false;
+        running = false;
+        reconnectJobRunning = false;
+        _reconnectEnabled = false;
 
-        _tcpClient?.Close();
+        try
+        {
+            if (getStream() != null)
+                getStream().Close();
+        }
+        catch (Exception ex)
+        {
+            
+        }
+        try
+        {
+            _tcpClient?.Close();
+        }
+        catch (Exception ex)
+        {
+            
+        }
+
+       
+
+        
+        
     }
 }
