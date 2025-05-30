@@ -16,10 +16,16 @@ public partial class MessageEntryView : UserControl
     public MessageEntryView(ConnectionPackage package) : this()
     {
         InitializeComponent();
+
+        if (package == null)
+            return;
+
+        MessageM msg = package.GetContentAs<MessageM>();
+        
         if (this.TimestampLabel != null)
-            TimestampLabel.Content = package.GetTimestamp().ToString("HH:mm",CultureInfo.DefaultThreadCurrentCulture);
+            TimestampLabel.Content = $"{msg.User} ({package.GetTimestamp().ToString("HH:mm",CultureInfo.DefaultThreadCurrentCulture)})";
 
         if (this.messageContent != null)
-            messageContent.Text = package.GetContentAsString();
+            messageContent.Text = msg.Msg;
     }
 }

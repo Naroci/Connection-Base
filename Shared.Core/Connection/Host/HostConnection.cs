@@ -101,10 +101,10 @@ public class HostConnection : IHostConnection
     private void OnDataMessageReceived(HostMessageEvent message)
     {
         var identifier = message.GetClient().GetUniqueIdentifier();
-        var messageReceived = message.GetPackage().GetContentAsString();
-        Console.WriteLine($"{identifier}: {messageReceived}");
-        if (!string.IsNullOrEmpty(messageReceived))
+        var messageReceived = message.GetPackage().GetContent();
+        if ( messageReceived != null && messageReceived.Length > 0)
         {
+            Console.WriteLine($"{identifier}: {messageReceived.Length}");
             Broadcast(messageReceived, message.GetClient());
         }
     }

@@ -5,6 +5,29 @@ namespace Connection.Shared;
 
 public class ConnectionPackage
 {
+    public static ConnectionPackage FromObject(object obj)
+    {
+        if (obj == null)
+            return null;
+        try
+        {
+            var json = JsonSerializer.Serialize(obj);
+            if (!string.IsNullOrEmpty(json))
+            {
+                var bytes = Encoding.UTF8.GetBytes(json);
+                return new ConnectionPackage(bytes);
+            }
+        }
+        catch (Exception ex)
+        {
+            
+            Console.WriteLine(ex.Message);
+        }
+
+        return null;
+
+    }
+
     private DateTime timestamp = DateTime.Now;
     private Guid id = Guid.NewGuid();
     private byte[] content;
@@ -13,7 +36,7 @@ public class ConnectionPackage
     {
         if (content == null)
             return 0;
-        
+
         return content.Length;
     }
 
@@ -31,7 +54,7 @@ public class ConnectionPackage
     {
         return GetId().ToString().Substring(0, 8);
     }
-    
+
     public byte[] GetContent() => content;
 
     public T GetContentAs<T>()
@@ -44,7 +67,7 @@ public class ConnectionPackage
         {
             return JsonSerializer.Deserialize<T>(stringContent);
         }
-        
+
         return default(T);
     }
 
@@ -60,8 +83,8 @@ public class ConnectionPackage
         }
         catch (Exception ex)
         {
-            
         }
+
         return stringResult;
     }
 
@@ -72,8 +95,5 @@ public class ConnectionPackage
 
     public ConnectionPackage()
     {
-        
     }
-    
-    
 }

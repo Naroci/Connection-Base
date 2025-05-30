@@ -50,7 +50,7 @@ public partial class MainView : UserControl
         }
 
         if (EntryBox != null && !string.IsNullOrEmpty(EntryBox.Text)) 
-            connection.Send(this.EntryBox.Text);
+            connection.Send(new MessageM() { Msg = EntryBox.Text, User = UsernameBox.Text});
 
         this.EntryBox.Text = string.Empty;
     }
@@ -73,4 +73,10 @@ public partial class MainView : UserControl
         });
        
     }
+}
+
+public class MessageM
+{
+    public string Msg { get; set; }
+    public string User { get; set; }
 }

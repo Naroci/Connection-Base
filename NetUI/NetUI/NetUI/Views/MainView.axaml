@@ -31,6 +31,7 @@
                     <TextBox Grid.Column="1" x:Name="portBox" Margin="5,0,0,0" Watermark="5555"
                              TextAlignment="Center" />
                 </Grid>
+                <TextBox Watermark="Username" TextAlignment="Center" x:Name="UsernameBox" Margin="0,15,0,0" />
                 <Button Content="Connect" Click="ConnectButtonClicked" Margin="0,15,0,0" HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Center" />
             </StackPanel>
