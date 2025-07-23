@@ -24,7 +24,7 @@ public class HostConnection : IHostConnection
     {
         if (!_clients.Contains(client))
         {
-            client.OnMessageReceived += package =>
+            client.OnPackageReceived += package =>
             {
                 var message = new HostMessageEvent(client, package);
                 this.OnDataReceived?.Invoke(message);
@@ -43,7 +43,7 @@ public class HostConnection : IHostConnection
     {
         if (_clients.Contains(client))
         {
-            client.OnMessageReceived -= package => { };
+            client.OnPackageReceived -= package => { };
             _clients.Remove(client);
             Console.WriteLine($"[{client.GetUniqueIdentifier()}] - Client removed");
         }

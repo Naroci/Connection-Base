@@ -9,6 +9,7 @@
         <Label x:Name="TimestampLabel" Margin="5,5,0,0" />
         <Border       HorizontalAlignment="Left" Background="GhostWhite" Grid.Row="1" Padding="5" Margin="5" BorderBrush="LightSteelBlue" BorderThickness="1" CornerRadius="5">
             <TextBlock x:Name="messageContent" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                       Foreground="DarkSlateGray"
                        TextWrapping="Wrap" />
         </Border>
     </Grid>

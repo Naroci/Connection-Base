@@ -28,10 +28,10 @@ public partial class MainView : UserControl
     {
         InitializeComponent();
         connection = new ClientConnection();
-        connection.OnMessageReceived += OnMessageReceived;
+        connection.OnPackageReceived += OnPackageReceived;
     }
 
-    private async void OnMessageReceived(ConnectionPackage obj)
+    private async void OnPackageReceived(ConnectionPackage obj)
     {
         if (this.entries == null || obj == null)
             return;

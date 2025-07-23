@@ -20,7 +20,7 @@ public class ClientConnection : IClientConnection
     private ConnectionStatus _connectionStatus;
     private bool networkStreamAvailable = false;
 
-    public Action<ConnectionPackage> OnMessageReceived { get; set; }
+    public Action<ConnectionPackage> OnPackageReceived { get; set; }
     
     private bool NetworkStreamAvailable
     {
@@ -275,7 +275,7 @@ public class ClientConnection : IClientConnection
             var result = buffer.Take(bytesRead).ToArray();
 
             if (bytesRead > 0 && result != null && result.Length > 0)
-                this.OnMessageReceived?.Invoke(new ConnectionPackage(result));
+                this.OnPackageReceived?.Invoke(new ConnectionPackage(result));
 
             SetConnectionStatus(ConnectionStatus.Waiting);
 

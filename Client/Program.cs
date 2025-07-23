@@ -16,7 +16,7 @@ class Program
         ClientConnection connection = new ClientConnection();
         connection.SetReconnectAttempts(10);
         connection.Connect("localhost", 5555);
-        connection.OnMessageReceived += package =>
+        connection.OnPackageReceived += package =>
         {
             Console.WriteLine($"[{package.GetTimestamp().TimeOfDay}, {package.GetId()}] Received: " +
                               $"\n ID : {package.GetShortId()} (Short)" +

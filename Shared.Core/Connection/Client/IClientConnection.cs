@@ -4,7 +4,7 @@ namespace Connection.Shared.Connection.Client;
 
 public interface IClientConnection
 {
-    Action<ConnectionPackage> OnMessageReceived { get; set; }
+    Action<ConnectionPackage> OnPackageReceived { get; set; }
 
     // 0 - endless!
     void SetReconnectAttempts(int attempt = 0);
