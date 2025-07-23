@@ -109,10 +109,16 @@ public class HostConnection : IHostConnection
         }
     }
 
-    public void Listen(int tickrate = 1000)
+    public void Listen(int tickrate = 150)
     {
         while (_isRunning)
         {
+            if (_clients == null || _clients != null && _clients.Count < 1)
+            {
+                Thread.Sleep(tickrate);
+                continue;
+            }
+
             lock (_clients)
             {
                 foreach (var client in GetClients())

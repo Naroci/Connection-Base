@@ -13,7 +13,9 @@
     <PropertyGroup>
         <MtouchLink>SdkOnly</MtouchLink>
     </PropertyGroup>
-
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <CodesignKey>iPhone Developer</CodesignKey>
+    </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\NetUI\NetUI.csproj"/>
     </ItemGroup>

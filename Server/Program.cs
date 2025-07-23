@@ -13,7 +13,7 @@ class Program
         Console.Title = ".:{[ Server ]}:.";
    
         HostConnection server = new();
-        server.Start(5555);
-        server.Listen(250);
+        server.Start(45678);
+        server.Listen();
     }
 }

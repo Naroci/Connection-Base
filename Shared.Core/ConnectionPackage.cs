@@ -63,10 +63,19 @@ public class ConnectionPackage
             return default(T);
 
         var stringContent = GetContentAsString();
-        if (!string.IsNullOrEmpty(stringContent))
+        try
         {
-            return JsonSerializer.Deserialize<T>(stringContent);
+            if (!string.IsNullOrEmpty(stringContent))
+            {
+                return JsonSerializer.Deserialize<T>(stringContent);
+            }
         }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+
+       
 
         return default(T);
     }
